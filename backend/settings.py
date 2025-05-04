@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-8pfan6!$)ev8+#mty^+fv5bw9ew=(820n@%g858j)!u0etc5qt
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*']  # For testing, restrict later
+CORS_ALLOW_ALL_ORIGINS = True  # For React connection
 
 #from outside for apps and env 
 
