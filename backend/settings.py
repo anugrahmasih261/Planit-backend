@@ -31,6 +31,7 @@ SECRET_KEY = 'django-insecure-8pfan6!$)ev8+#mty^+fv5bw9ew=(820n@%g858j)!u0etc5qt
 # DEBUG = True
 # for deployment 
 # Update these settings:
+
 DEBUG = False  # Change to False in production
 
 ALLOWED_HOSTS = [
@@ -43,25 +44,47 @@ ALLOWED_HOSTS = [
 
 # CORS settings - Update these
 # 3. CORS & CSRF SETTINGS
-# 3. CORS & CSRF SETTINGS
+# settings.py
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # For local development
-    "https://planit-frontend-b3z0k8h1e-anugrahs-projects-2159a6eb.vercel.app",  # Your production frontend
-    "https://planit-frontend.vercel.app"  # If you have a custom domain/subdomain
+    "http://localhost:3000",
+    "https://planit-frontend-b3z0k8h1e-anugrahs-projects-2159a6eb.vercel.app",
+    "https://planit-frontend.vercel.app"
 ]
 
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://planit-backend-2f8w.onrender.com',  # Your backend domain
-    'http://localhost:3000',  # Local frontend
-    'https://planit-frontend-b3z0k8h1e-anugrahs-projects-2159a6eb.vercel.app',  # Production frontend
-    'https://planit-frontend.vercel.app'  # If you have a custom domain/subdomain
+    'https://planit-backend-2f8w.onrender.com',
+    'http://localhost:3000',
+    'https://planit-frontend-b3z0k8h1e-anugrahs-projects-2159a6eb.vercel.app',
+    'https://planit-frontend.vercel.app'
 ]
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
 
 CORS_ALLOW_CREDENTIALS = True
 
 # For better security, also add these:
-CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
+# CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SAMESITE = 'Lax'
 
@@ -90,12 +113,16 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic'
 ]
 
+
+
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add this for static files
     #for cors 
     'corsheaders.middleware.CorsMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add this for static files
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
