@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+from datetime import timedelta
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,18 +28,42 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-8pfan6!$)ev8+#mty^+fv5bw9ew=(820n@%g858j)!u0etc5qt'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+# for deployment 
+# Update these settings:
+DEBUG = False  # Change to False in production
 
-ALLOWED_HOSTS = ['*']  # For testing, restrict later
-CORS_ALLOW_ALL_ORIGINS = True  # For React connection
+ALLOWED_HOSTS = [
+    'planit-backend-2f8w.onrender.com', 
+    'localhost',
+    '127.0.0.1'
+]
 
-#from outside for apps and env 
+# CORS_ALLOW_ALL_ORIGINS = True  # For React connection
 
-import os
-from datetime import timedelta
-from dotenv import load_dotenv
+# CORS settings - Update these
+# 3. CORS & CSRF SETTINGS
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "https://your-frontend-domain.vercel.app",  # Replace with your actual frontend URL
+]
 
-load_dotenv()
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://planit-backend-2f8w.onrender.com',
+    'http://localhost:3000',
+    'https://your-frontend-domain.vercel.app',
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+
+# 4. SECURITY HEADERS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+
 
 
 # Application definition
@@ -50,12 +79,14 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'users',
-    'trips'
+    'trips',
+    'whitenoise.runserver_nostatic'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add this for static files
     #for cors 
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -65,6 +96,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+# Static files (CSS, JavaScript, Images)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
@@ -72,8 +107,7 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
-# Add this to your settings.py
-APPEND_SLASH = False
+
 
 # DRF settings
 REST_FRAMEWORK = {
@@ -94,27 +128,14 @@ SIMPLE_JWT = {
 
 AUTH_USER_MODEL = 'users.User'
 
-# in future if using postgresql on aws then only this DB settings
 
-
-# Database
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('DB_NAME'),
-#         'USER': os.getenv('DB_USER'),
-#         'PASSWORD': os.getenv('DB_PASSWORD'),
-#         'HOST': os.getenv('DB_HOST'),
-#         'PORT': os.getenv('DB_PORT'),
-#     }
-# }
 
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Add if you have custom templates
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -175,9 +196,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+
+# 10. STATIC FILES (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Add this to your settings.py
+APPEND_SLASH = False
