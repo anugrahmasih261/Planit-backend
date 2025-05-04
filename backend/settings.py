@@ -43,20 +43,27 @@ ALLOWED_HOSTS = [
 
 # CORS settings - Update these
 # 3. CORS & CSRF SETTINGS
+# 3. CORS & CSRF SETTINGS
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "https://your-frontend-domain.vercel.app",  # Replace with your actual frontend URL
+    "http://localhost:3000",  # For local development
+    "https://planit-frontend-b3z0k8h1e-anugrahs-projects-2159a6eb.vercel.app",  # Your production frontend
+    "https://planit-frontend.vercel.app"  # If you have a custom domain/subdomain
 ]
 
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://planit-backend-2f8w.onrender.com',
-    'http://localhost:3000',
-    'https://your-frontend-domain.vercel.app',
+    'https://planit-backend-2f8w.onrender.com',  # Your backend domain
+    'http://localhost:3000',  # Local frontend
+    'https://planit-frontend-b3z0k8h1e-anugrahs-projects-2159a6eb.vercel.app',  # Production frontend
+    'https://planit-frontend.vercel.app'  # If you have a custom domain/subdomain
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
+# For better security, also add these:
+CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
 
 # 4. SECURITY HEADERS
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
