@@ -44,20 +44,20 @@ ALLOWED_HOSTS = [
 ]
 
 # CORS Settings - Critical for frontend-backend communication
+# CORS Settings - Updated with your exact frontend URLs
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "https://planit-frontend-b3z0k8h1e-anugrahs-projects-2159a6eb.vercel.app",
-    "https://planit-frontend.vercel.app",
-    "https://planit-frontend-hxbmyhcso-anugrahs-projects-2159a6eb.vercel.app"  # Added your new frontend URL
+    "http://localhost:3000",  # Local development
+    "https://planit-frontend-nine.vercel.app",  # Your main production URL
+    "https://planit-frontend-o6x97rbdf-anugrahs-projects-2159a6eb.vercel.app",  # Current deployment
 ]
+
 
 # Required for CSRF protection with CORS
 CSRF_TRUSTED_ORIGINS = [
-    'https://planit-backend-2f8w.onrender.com',
-    'http://localhost:3000',
-    'https://planit-frontend-b3z0k8h1e-anugrahs-projects-2159a6eb.vercel.app',
-    'https://planit-frontend.vercel.app',
-    'https://planit-frontend-hxbmyhcso-anugrahs-projects-2159a6eb.vercel.app'  # Added your new frontend URL
+    'https://planit-backend-2f8w.onrender.com',  # Your backend
+    'http://localhost:3000',  # Local development
+    'https://planit-frontend-nine.vercel.app',  # Main production URL
+    'https://planit-frontend-o6x97rbdf-anugrahs-projects-2159a6eb.vercel.app',  # Current deployment
 ]
 
 # These are NECESSARY for proper CORS functionality
