@@ -43,14 +43,13 @@ ALLOWED_HOSTS = [
     '127.0.0.1'
 ]
 
-<<<<<<< HEAD
 # CORS Settings - Critical for frontend-backend communication
-=======
+
 # CORS_ALLOW_ALL_ORIGINS = True  # For React connection
 
 # CORS settings - Update these
 # 3. CORS & CSRF SETTINGS
->>>>>>> HEAD@{1}
+
 # CORS Settings - Updated with your exact frontend URLs
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Local development
@@ -67,11 +66,8 @@ CSRF_TRUSTED_ORIGINS = [
     'https://planit-frontend-o6x97rbdf-anugrahs-projects-2159a6eb.vercel.app',  # Current deployment
 ]
 
-<<<<<<< HEAD
-# These are NECESSARY for proper CORS functionality
-=======
 
->>>>>>> HEAD@{1}
+# These are NECESSARY for proper CORS functionality
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
@@ -94,17 +90,15 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-<<<<<<< HEAD
+
 # Essential for cookies/session to work cross-origin
 CORS_ALLOW_CREDENTIALS = True
 
 # Expose these headers to the frontend
 CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
-=======
+
 
 # Essential additional settings
-CORS_ALLOW_CREDENTIALS = True
-CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 SESSION_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True
@@ -112,7 +106,7 @@ CSRF_COOKIE_SECURE = True
 APPEND_SLASH = False
 
 
->>>>>>> HEAD@{1}
+
 
 # Cookie settings - Critical for production with HTTPS
 SESSION_COOKIE_SAMESITE = 'None'  # Required for cross-site cookies
@@ -140,14 +134,11 @@ INSTALLED_APPS = [
 
 # Middleware order is CRUCIAL - CorsMiddleware must come first
 MIDDLEWARE = [
-<<<<<<< HEAD
     'corsheaders.middleware.CorsMiddleware',  # Absolutely must be first
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-=======
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
->>>>>>> HEAD@{1}
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -161,13 +152,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-<<<<<<< HEAD
-=======
 
 
-
-
->>>>>>> HEAD@{1}
 # DRF settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -244,9 +230,4 @@ USE_TZ = True
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-<<<<<<< HEAD
-# Disable APPEND_SLASH to avoid redirect issues with API endpoints
-APPEND_SLASH = False
-=======
 
->>>>>>> HEAD@{1}
