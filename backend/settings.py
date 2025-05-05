@@ -44,20 +44,21 @@ ALLOWED_HOSTS = [
 
 # CORS settings - Update these
 # 3. CORS & CSRF SETTINGS
-# settings.py
+# CORS Settings - Updated with your exact frontend URLs
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "https://planit-frontend-b3z0k8h1e-anugrahs-projects-2159a6eb.vercel.app",
-    "https://planit-frontend.vercel.app"
+    "http://localhost:3000",  # Local development
+    "https://planit-frontend-nine.vercel.app",  # Your main production URL
+    "https://planit-frontend-o6x97rbdf-anugrahs-projects-2159a6eb.vercel.app",  # Current deployment
 ]
 
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://planit-backend-2f8w.onrender.com',
-    'http://localhost:3000',
-    'https://planit-frontend-b3z0k8h1e-anugrahs-projects-2159a6eb.vercel.app',
-    'https://planit-frontend.vercel.app'
+    'https://planit-backend-2f8w.onrender.com',  # Your backend
+    'http://localhost:3000',  # Local development
+    'https://planit-frontend-nine.vercel.app',  # Main production URL
+    'https://planit-frontend-o6x97rbdf-anugrahs-projects-2159a6eb.vercel.app',  # Current deployment
 ]
+
 
 CORS_ALLOW_METHODS = [
     'DELETE',
@@ -81,17 +82,14 @@ CORS_ALLOW_HEADERS = [
 ]
 
 
+# Essential additional settings
 CORS_ALLOW_CREDENTIALS = True
-
-# For better security, also add these:
-# CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
-SESSION_COOKIE_SAMESITE = 'Lax'
-CSRF_COOKIE_SAMESITE = 'Lax'
-
-# 4. SECURITY HEADERS
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
+SESSION_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+APPEND_SLASH = False
 
 
 
@@ -118,9 +116,8 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    #for cors 
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Add this for static files
     'django.middleware.common.CommonMiddleware',
@@ -134,12 +131,7 @@ MIDDLEWARE = [
 # Static files (CSS, JavaScript, Images)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# CORS settings
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
 
-CORS_ALLOW_CREDENTIALS = True
 
 
 
@@ -242,5 +234,3 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# Add this to your settings.py
-APPEND_SLASH = False
