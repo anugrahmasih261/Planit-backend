@@ -28,11 +28,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-8pfan6!$)ev8+#mty^+fv5bw9ew=(820n@%g858j)!u0etc5qt'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-# for deployment 
-# Update these settings:
+DEBUG = False  # False in production
 
-DEBUG = False  # Change to False in production
+# Security settings for production
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 ALLOWED_HOSTS = [
     'planit-backend-2f8w.onrender.com', 
@@ -40,27 +43,24 @@ ALLOWED_HOSTS = [
     '127.0.0.1'
 ]
 
-# CORS_ALLOW_ALL_ORIGINS = True  # For React connection
-
-# CORS settings - Update these
-# 3. CORS & CSRF SETTINGS
-# settings.py
-
-# Update your CORS settings to this:
+# CORS Settings - Critical for frontend-backend communication
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://planit-frontend-b3z0k8h1e-anugrahs-projects-2159a6eb.vercel.app",
-    "https://planit-frontend.vercel.app"
+    "https://planit-frontend.vercel.app",
+    "https://planit-frontend-hxbmyhcso-anugrahs-projects-2159a6eb.vercel.app"  # Added your new frontend URL
 ]
 
-
+# Required for CSRF protection with CORS
 CSRF_TRUSTED_ORIGINS = [
     'https://planit-backend-2f8w.onrender.com',
     'http://localhost:3000',
     'https://planit-frontend-b3z0k8h1e-anugrahs-projects-2159a6eb.vercel.app',
-    'https://planit-frontend.vercel.app'
+    'https://planit-frontend.vercel.app',
+    'https://planit-frontend-hxbmyhcso-anugrahs-projects-2159a6eb.vercel.app'  # Added your new frontend URL
 ]
 
+# These are NECESSARY for proper CORS functionality
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
@@ -70,6 +70,7 @@ CORS_ALLOW_METHODS = [
     'PUT',
 ]
 
+# These headers are required for JWT authentication and CSRF
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
@@ -82,22 +83,21 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-
+# Essential for cookies/session to work cross-origin
 CORS_ALLOW_CREDENTIALS = True
+
+# Expose these headers to the frontend
 CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 
-# For better security, also add these:
-# CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
-SESSION_COOKIE_SAMESITE = 'None'
-CSRF_COOKIE_SAMESITE = 'None'
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
-
-
+# Cookie settings - Critical for production with HTTPS
+SESSION_COOKIE_SAMESITE = 'None'  # Required for cross-site cookies
+CSRF_COOKIE_SAMESITE = 'None'     # Required for CSRF protection
+SESSION_COOKIE_SECURE = True      # Only send over HTTPS
+CSRF_COOKIE_SECURE = True         # Only send over HTTPS
+SESSION_COOKIE_HTTPONLY = True    # Prevent client-side JS access
+CSRF_COOKIE_HTTPONLY = False      # Allow JS to read CSRF token
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -107,21 +107,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    'corsheaders',
+    'corsheaders',  # Must be before any middleware that generates responses
     'users',
     'trips',
     'whitenoise.runserver_nostatic'
 ]
 
-
-
-
-
+# Middleware order is CRUCIAL - CorsMiddleware must come first
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # This should be first
+    'corsheaders.middleware.CorsMiddleware',  # Absolutely must be first
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -129,15 +126,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
 # Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-
-
-
-
-
 
 # DRF settings
 REST_FRAMEWORK = {
@@ -145,7 +137,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',  # More flexible than IsAuthenticated
     )
 }
 
@@ -154,18 +146,20 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_COOKIE': 'access_token',  # Cookie name for JWT
+    'AUTH_COOKIE_SECURE': True,     # HTTPS only
+    'AUTH_COOKIE_SAMESITE': 'None', # Cross-site cookies
 }
 
 AUTH_USER_MODEL = 'users.User'
-
-
 
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Add if you have custom templates
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -180,10 +174,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-
 # Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -191,10 +182,7 @@ DATABASES = {
     }
 }
 
-
 # Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -210,33 +198,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-
-
-# 10. STATIC FILES (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-# Add this to your settings.py
+# Disable APPEND_SLASH to avoid redirect issues with API endpoints
 APPEND_SLASH = False
