@@ -206,21 +206,19 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # }
 
 # to make sure data is persitant
-import os
 
 
-# Temporary debug configuration
+# Add the new PostgreSQL configuration
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),  # Local development
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'planit_db_uzox',        # From Render connection info
+        'USER': 'planit_user',        # From Render connection info
+        'PASSWORD': '6xYZ2gaZP3LezOsWcmqOBNEg6U8TPvQn', # From Render connection info
+        'HOST': 'dpg-d0ci72h5pdvs73a30tb0-a.oregon-postgres.render.com',        # From Render (like dpg-xxxx-a.oregon-postgres.render.com)
+        'PORT': '5432',                      # Default PostgreSQL port
     }
 }
-
-# Render-specific configuration
-if os.getenv('RENDER'):
-    DATABASES['default']['NAME'] = '/var/lib/data/db.sqlite3'
-
 
 
 # Password validation
