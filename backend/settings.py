@@ -45,6 +45,8 @@ ALLOWED_HOSTS = [
 # CORS settings - Update these
 # 3. CORS & CSRF SETTINGS
 # settings.py
+
+# Update your CORS settings to this:
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://planit-frontend-b3z0k8h1e-anugrahs-projects-2159a6eb.vercel.app",
@@ -82,14 +84,12 @@ CORS_ALLOW_HEADERS = [
 
 
 CORS_ALLOW_CREDENTIALS = True
+CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 
 # For better security, also add these:
 # CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
-SESSION_COOKIE_SAMESITE = 'Lax'
-CSRF_COOKIE_SAMESITE = 'Lax'
-
-# 4. SECURITY HEADERS
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
@@ -118,11 +118,10 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # This should be first
     'django.middleware.security.SecurityMiddleware',
-    #for cors 
-    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add this for static files
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -134,12 +133,9 @@ MIDDLEWARE = [
 # Static files (CSS, JavaScript, Images)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# CORS settings
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
 
-CORS_ALLOW_CREDENTIALS = True
+
+
 
 
 
