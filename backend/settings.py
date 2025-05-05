@@ -208,21 +208,18 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # to make sure data is persitant
 import os
 
-# In settings.py
+
+# Temporary debug configuration
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),  # Local development
+    }
+}
+
+# Render-specific configuration
 if os.getenv('RENDER'):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': '/var/lib/data/db.sqlite3',
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
+    DATABASES['default']['NAME'] = '/var/lib/data/db.sqlite3'
 
 
 
